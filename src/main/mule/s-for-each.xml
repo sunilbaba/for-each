@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="704cb04f-3616-4c8f-aaae-99187431bfbe" >
+
+		<http:listener-connection host="0.0.0.0" port="8081" />
+
+	</http:listener-config>
+
+	<flow name="for-each-usecaseFlow" doc:id="c67e7e25-2a14-45ae-90ea-8d9c3c1bdc6c" >
+
+		<http:listener doc:name="Listener" doc:id="f0b01003-1e41-4bd4-b069-6419ca78afee" path="/foreach" config-ref="HTTP_Listener_config"/>
+
+		<logger level="INFO" doc:name="Logger" doc:id="e5e4ed1e-215c-467d-a1d0-9ab3d679b35f" message="#[payload]"/>
+
+		<ee:transform doc:name="Transform Message" doc:id="66f9e88a-b5f5-4f4a-a3a6-8e0fa53b3246" >
+
+			<ee:message >
+
+				<ee:set-payload ><![CDATA[%dw 2.0
+
+output application/java
+
+---
+
+payload]]></ee:set-payload>
+
+			</ee:message>
+
+		</ee:transform>
+
+		<foreach doc:name="For Each" doc:id="93d22952-355a-465c-95df-108011d1169a" >
+
+			<logger level="INFO" doc:name="Logger" doc:id="09a4f8d3-2bd7-4e0e-aa75-88781c36400d" message="#[payload]"/>
+
+			<logger level="INFO" doc:name="Logger" doc:id="36b2835d-48b8-40c4-947b-151124123095" message='"file process"'/>
+
+		</foreach>
+
+		<logger level="INFO" doc:name="Logger" doc:id="77824d8d-86b4-4886-a99d-e23b51f5e28d" />
+
+	</flow>
+
+</mule>
